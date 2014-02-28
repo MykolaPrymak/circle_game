@@ -1,12 +1,14 @@
-define(['vendor/class'], function() {
-  EventEmiter = Class.extend({
+define(['underscore', 'class', 'log'], function(_, Class, log) {
+  var EventEmiter = Class.extend({
     init: function() {
       this.eventListeners = {};
     },
     /**
      * Handle the event to the listeners
+     * You can use a space in eventType for attach the callback to 
+     * multiply event simultaneous
      * 
-     * @param  String  Event name, to listen. Use space to separate multiply events
+     * @param  String  Event name, to listen. Use space as separator
      * @param  Object  Event handle function
      * @return self
      */
@@ -48,17 +50,16 @@ define(['vendor/class'], function() {
       }
       event.type = (event.type || '').toLowerCase();
       if (_.isObject(extraParameters)) {
-        _.extend(event, extraParameters)
+        _.extend(event, extraParameters);
       }
       callbacks = this.eventListeners[event.type] || [];
       _.each(callbacks, function(callback) {
-          try {
-            // Make the copy of event data and call the callback with all additional parameters
-            var kjkj = [_.extend(event)].concat(extraParameters);
-            callback.apply(self, [_.extend(event)].concat(extraParameters));
-          } catch (e) {
-            //log(e);
-          }
+        try {
+          // Make the copy of event data for each callback
+          callback.apply(self, [_.extend(event)].concat(extraParameters));
+        } catch (e) {
+          log.error(e);
+        }
       });
       return this;
     }

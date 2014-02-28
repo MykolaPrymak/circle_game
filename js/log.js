@@ -1,40 +1,37 @@
-define(['vendor/class'], function() {
+define(['underscore'], function(_) {
+  /**
+   * @constant
+   */
   var LOG_LEVEL_SILENT = 0;
+  /**
+   * @constant
+   */
   var LOG_LEVEL_INFO   = 1;
+  /**
+   * @constant
+   */
   var LOG_LEVEL_WARING = 2;
+  /**
+   * @constant
+   */
   var LOG_LEVEL_ERROR  = 3;
+  /**
+   * @constant
+   */
   var LOG_LEVEL_DEBUG  = 4;
 
-  Log = Class.extend({
-    init: function(level) {
-      this.level = level || LOG_LEVEL_DEBUG;
-      if (!window.console) {
-          var console = function(){};
-          console.log = console.debug = console.error = console.warn = console.info = console;
-          window.console = console;
+  var Log = function(level) {
+    this.level = level;
+  };
+
+  _.each(['info', 'debug', 'error', 'warn'], function(name, level) {
+    Log.prototype[name] = function() {
+      if (window.console && (level < this.level)) {
+        window.console[name].apply(window.console, arguments);
       }
-    },
-    debug: function() {
-      if (this.level >= LOG_LEVEL_DEBUG) {
-          console.debug.apply(console, arguments);
-      }
-    },
-    error: function() {
-      if (this.level >= LOG_LEVEL_ERROR) {
-          console.error.apply(console, arguments);
-      }
-    },
-    warn: function() {
-      if (this.level >= LOG_LEVEL_WARING) {
-          console.warn.apply(console, arguments);
-      }
-    },
-    info: function() {
-      if (this.level >= LOG_LEVEL_INFO) {
-          console.info.apply(console, arguments);
-      }
-    }
+    };
   });
 
-  return Log;
+  window.log = new Log(LOG_LEVEL_DEBUG);
+  return window.log;
 });
