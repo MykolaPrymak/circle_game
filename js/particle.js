@@ -9,8 +9,12 @@ define(['underscore', 'class'], function(_, Class) {
 
   var Particle = Class.extend({
     init: function (maxWidth, maxHeight) {
-      this.maxWidth = maxWidth;
-      this.maxHeight = maxHeight;
+      this.maxWidth = ~~maxWidth;
+      this.maxHeight = ~~maxHeight;
+      
+      if (!((this.maxWidth > 0) || (this.maxHeight > 0))) {
+        throw new RangeError('The particle max positions is set to zero');
+      }
 
       this.x = _.random(maxWidth);
       this.y = _.random(maxHeight);
@@ -27,18 +31,20 @@ define(['underscore', 'class'], function(_, Class) {
       //this.opacity = random(0.2, 1);
     },
     draw: function (ctx) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, DOUBLE_PI);
-      ctx.fillStyle = this.color;
-      //ctx.globalAlpha = (this.opacity);
-      
-      ctx.closePath();
-      ctx.fill();
-      //ctx.fillStyle = '#000';
-      //ctx.fillText('x:' + this.x.toFixed(2), this.x, this.y);
-      //ctx.fillText('y:' + this.y.toFixed(2), this.x, this.y+10);
-      ctx.restore();
+      if (ctx && ctx.beginPath) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, DOUBLE_PI);
+        ctx.fillStyle = this.color;
+        //ctx.globalAlpha = (this.opacity);
+        
+        ctx.closePath();
+        ctx.fill();
+        //ctx.fillStyle = '#000';
+        //ctx.fillText('x:' + this.x.toFixed(2), this.x, this.y);
+        //ctx.fillText('y:' + this.y.toFixed(2), this.x, this.y+10);
+        ctx.restore();
+      }
     },
     isCollision: function(entity) {
       if (entity instanceof Particle) {

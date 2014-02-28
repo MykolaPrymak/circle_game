@@ -1,0 +1,15 @@
+{
+  "browser": true,
+  "globals": {
+    "requirejs": false,
+    "define": false
+  },
+  "undef": true,
+  "unused": true,
+  "indent": 2,
+  "maxlen": 80,
+  "quotmark": "single",
+  "camelcase" : true,
+  "trailing": true,
+  "curly": true
+}

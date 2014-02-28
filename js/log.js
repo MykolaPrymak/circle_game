@@ -1,3 +1,4 @@
+/* global console:true */
 define(['underscore'], function(_) {
   /**
    * @constant
@@ -24,14 +25,16 @@ define(['underscore'], function(_) {
     this.level = level;
   };
 
+  var global = global || this; // window in broser and global in Node.js
+
   _.each(['info', 'debug', 'error', 'warn'], function(name, level) {
     Log.prototype[name] = function() {
-      if (window.console && (level < this.level)) {
-        window.console[name].apply(window.console, arguments);
+      if (global.console && (level < this.level)) {
+        console[name].apply(console, arguments);
       }
     };
   });
 
-  window.log = new Log(LOG_LEVEL_DEBUG);
-  return window.log;
+  global.log = new Log(LOG_LEVEL_DEBUG);
+  return global.log;
 });

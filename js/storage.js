@@ -1,4 +1,4 @@
-define(['class'], function(Class) {
+define(['class', 'log'], function(Class, log) {
   /**
    * Get the object key by path.
    * path can contain the ":" as delimiter
@@ -56,7 +56,11 @@ define(['class'], function(Class) {
       var key;
 
       while (path.length) {
-        // && ((key = path.shift()) in obj)
+        if (!(obj instanceof Object)){
+          log.warn('Cannot set the property of non-object %j', obj);
+          break;
+        }
+      // && ((key = path.shift()) in obj)
         key = path.shift();
         if (path.length !== 0) {
           if (!(key in obj)) {
@@ -65,13 +69,14 @@ define(['class'], function(Class) {
           obj = obj[key];
         }
       }
-
       if (!!path.length) {
         return false;
       }
       return [obj, key];
     }
   }
+
+  var global = global || this; // window in broser and global in Node.js
 
   var Storage = Class.extend({
     init: function() {
@@ -97,7 +102,7 @@ define(['class'], function(Class) {
       this.save();
     },
     isHaveLocalStorage: function() {
-      return !!window || window.localStorage;
+      return !!global && global.localStorage;
     },
     isHaveProperty: function(name) {
       return !!this.data.hasOwnProperty(name);
@@ -119,27 +124,26 @@ define(['class'], function(Class) {
         } else {
           result[0][result[1]] = value;
         }
-        //console.log('result = %j, key = %s, value = %s', result, key, value);
+        this.save();
         return true;
       }
       //console.dir(result);
       return false;
     },
     setAudioState: function(state) {
-      this.data.isAudioEnabled = !!state;
-      this.save();
+      return this.set('isAudioEnabled', !!state);
     },
     getAudioState: function() {
       return this.get('isAudioEnabled');
     },
     setMaxScore: function(score) {
-      if (score > this.data.maxScore) {
-        this.data.maxScore = ~~score;
-        this.save();
+      if (score > this.get('maxScore')) {
+        return this.set('maxScore', ~~score);
       }
+      return true;
     },
     getMaxScore: function() {
-      return this.data.maxScore;
+      return this.get('maxScore');
     }
   });
 
