@@ -1,15 +1,26 @@
 {
+  "node": true,
   "browser": true,
   "globals": {
     "requirejs": false,
     "define": false
   },
-  "undef": true,
-  "unused": true,
+  "esnext": true,
+  "bitwise": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
   "indent": 2,
   "maxlen": 80,
+  "latedef": true,
+  "newcap": true,
+  "noarg": true,
   "quotmark": "single",
-  "camelcase" : true,
+  "undef": true,
+  "unused": true,
+  "strict": true,
   "trailing": true,
-  "curly": true
+  "smarttabs": true,
+  "jquery": true
 }
