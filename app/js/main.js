@@ -17,9 +17,9 @@ requirejs.config({
   paths: {
     jquery : [
       '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min',
-      'js/vendor/jquery-1.9.1.min.js'
+      'vendor/jquery/jquery.min'
     ],
-    underscore: 'vendor/underscore.min',
+    underscore: '../vendor/underscore/underscore-min',
     'class': 'vendor/class'
   }
 });

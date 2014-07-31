@@ -1,0 +1,11 @@
+app/export/
+app/res/music/
+app/res/sprites/
+app/res/sounds/combo_hit.mp3
+app/res/sounds/loot.mp3
+app/vendor/
+dist
+.tmp
+.sass-cache
+node_modules
+test/bower_components

@@ -1,6 +1,8 @@
-define(['particle'], function(Particle) {
+define(['particle', 'log'], function(Particle, log) {
   // MAX FPS * maximum time to cross the display
   var PLAYER_MAX_SPEED = (60 * 5);
+  var DOUBLE_PI = Math.PI * 2;
+  var DRAW_PATH_DISTANCE = 300;
 
   var Player = Particle.extend({
     init: function(maxWidth, maxHeight) {
@@ -34,6 +36,33 @@ define(['particle'], function(Particle) {
     draw: function(ctx) {
       if (this.enabled) {
         this._super(ctx);
+        if (this.getDistanceTo(this.dstX, this.dstY) > DRAW_PATH_DISTANCE) {
+          this.drawTarget(ctx);
+        }
+      }
+    },
+    drawTarget: function(ctx) {
+      if (ctx && ctx.beginPath) {
+        ctx.save();
+
+        ctx.globalCompositeOperation = 'xor';
+        ctx.lineWidth = 1.5;
+        ctx.globalAlpha = .5;
+        ctx.strokeStyle = '#ff0000';
+
+        ctx.beginPath();
+
+        ctx.arc(this.dstX, this.dstY, 15, 0, DOUBLE_PI);
+
+        ctx.moveTo(this.dstX -20, this.dstY);
+        ctx.lineTo(this.dstX + 20, this.dstY);
+        ctx.moveTo(this.dstX, this.dstY - 20);
+        ctx.lineTo(this.dstX, this.dstY + 20);
+
+        ctx.closePath();
+        ctx.stroke();
+
+        ctx.restore();
       }
     },
     tick: function() {
@@ -63,8 +92,10 @@ define(['particle'], function(Particle) {
       return this;
     },
     moveTo: function(x, y) {
+      // To int
       x = ~~x;
       y = ~~y;
+
       // Check borders
       if (x < this.radius) {
         x = this.radius;
@@ -79,7 +110,7 @@ define(['particle'], function(Particle) {
       
       this.dstX = x;
       this.dstY = y;
-      // Check the distance to destination point
+      // Check the distance to destination point by X and Y axis
       var rangeX = Math.abs(x - this.x);
       var rangeY = Math.abs(y - this.y);
 

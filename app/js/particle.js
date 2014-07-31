@@ -1,7 +1,9 @@
 define(['underscore', 'class'], function(_, Class) {
+
   var DOUBLE_PI = Math.PI * 2;
   var PARTICLE_RADIUS_MIN = 5;
   var PARTICLE_RADIUS_MAX = 40;
+
   function square(x) {
     return x * x;
   }
@@ -48,12 +50,16 @@ define(['underscore', 'class'], function(_, Class) {
     },
     isCollision: function(entity) {
       if (entity instanceof Particle) {
-        var distance = sqrt(square(this.x - entity.x) + square(this.y - entity.y));
+        var distance = this.getDistanceTo(entity.x, entity.y);
         if (distance < (this.radius + entity.radius)) {
           return true;
         }
       }
       return false;
+    },
+
+    getDistanceTo: function(x, y) {
+      return sqrt(square(this.x - x) + square(this.y - y));
     }
   });
 

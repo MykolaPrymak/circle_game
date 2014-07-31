@@ -36,7 +36,7 @@ define(['underscore', 'game', 'eventemiter', 'storage', 'log'], function(_, Game
         } else {
           self.legend.className = 'legend win';
         }
-        this.result.innerHTML = 'You score is ' + evt.score + '. Max score is ' + evt.maxScore;
+        self.result.innerHTML = 'You score is ' + evt.score + '. Max score is ' + evt.maxScore;
       });
       
       if (!this.storage.getAudioState()) {
